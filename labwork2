@@ -1,0 +1,64 @@
+class Student:
+    def __init__(self, sid, name, dob):
+        self.sid = sid
+        self.name = name
+        self.dob = dob
+
+    def show(self):
+        print(self.sid, "-", self.name, "-", self.dob)
+
+
+class Course:
+    def __init__(self, cid, name):
+        self.cid = cid
+        self.name = name
+
+    def show(self):
+        print(self.cid, "-", self.name)
+
+
+class StudentMark:
+    def __init__(self):
+        self.students = []
+        self.courses = []
+        self.marks = {}
+    def input_students(self):
+        n = int(input("Number of students: "))
+        for _ in range(n):
+            sid = input("Student ID: ")
+            name = input("Name: ")
+            dob = input("DoB: ")
+            self.students.append(Student(sid, name, dob))
+
+    def input_courses(self):
+        n = int(input("\nNumber of courses: "))
+        for _ in range(n):
+            cid = input("Course ID: ")
+            name = input("Course name: ")
+            self.courses.append(Course(cid, name))
+            self.marks[cid] = {}
+
+    def input_marks(self):
+        for course in self.courses:
+            print(f"\nEnter marks for course {course.name}")
+            for student in self.students:
+                mark = float(input(f"Mark for {student.sid}: "))
+                self.marks[course.cid][student.sid] = mark
+     def list_students(self):
+        print("\n--- Students ---")
+        for s in self.students:
+            s.show()
+
+    def list_courses(self):
+        print("\n--- Courses ---")
+        for c in self.courses:
+            c.show()
+
+    def show_marks_for_course(self):
+        cid = input("\nEnter course ID: ")
+        if cid not in self.marks:
+            print("Course not found!")
+            return
+        print(f"\n--- Marks for course {cid} ---")
+        for s in self.students:
+            print(s.name, ":", self.marks[cid].get(s.sid, "N/A"))
