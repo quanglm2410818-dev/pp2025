@@ -1,0 +1,35 @@
+import pickle
+import gzip
+
+def save_system(system):
+    with gzip.open("students.dat", "wb") as f:
+        pickle.dump(system, f)
+def load_system():
+    if os.path.exists("students.dat"):
+        with gzip.open("students.dat", "rb") as f:
+            return pickle.load(f)
+    return None
+from marks import StudentMark
+from utils import *
+import os
+
+system = load_system()
+
+if system is None:
+    system = StudentMark()
+    system.students = input_students()
+    system.courses = input_courses()
+
+    for c in system.courses:
+        system.add_course(c.cid)
+
+    for c in system.courses:
+        for s in system.students:
+            m = float(input(f"Mark for {s.sid}: "))
+            system.add_mark(c.cid, s.sid, m)
+
+    save_system(system)
+
+system.list_students()
+system.list_courses()
+system.show_marks_for_course()
