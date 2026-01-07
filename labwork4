@@ -1,0 +1,74 @@
+#student.py
+class Student:
+    def __init__(self, sid, name, dob):
+        self.sid = sid
+        self.name = name
+        self.dob = dob
+
+    def show(self):
+        print(self.sid, "-", self.name, "-", self.dob)
+#course.py
+class Course:
+    def __init__(self, cid, name):
+        self.cid = cid
+        self.name = name
+
+    def show(self):
+        print(self.cid, "-", self.name)
+#mark.py
+class StudentMark:
+    def __init__(self):
+        self.marks = {}  # {course_id: {student_id: mark}}
+
+    def add_course(self, cid):
+        self.marks[cid] = {}
+
+    def add_mark(self, cid, sid, mark):
+        self.marks[cid][sid] = mark
+
+    def show_course_marks(self, cid, students):
+        print(f"\nMarks for course {cid}")
+        for s in students:
+            print(s.name, ":", self.marks[cid].get(s.sid, "N/A"))
+#utils.py
+from student import Student
+from course import Course
+
+def input_students():
+    students = []
+    n = int(input("Number of students: "))
+    for _ in range(n):
+        sid = input("Student ID: ")
+        name = input("Name: ")
+        dob = input("DoB: ")
+        students.append(Student(sid, name, dob))
+    return students
+
+def input_courses():
+    courses = []
+    n = int(input("\nNumber of courses: "))
+    for _ in range(n):
+        cid = input("Course ID: ")
+        name = input("Course name: ")
+        courses.append(Course(cid, name))
+    return courses
+#main.py
+from utils import input_students, input_courses
+from marks import StudentMark
+
+students = input_students()
+courses = input_courses()
+
+mark_system = StudentMark()
+
+for c in courses:
+    mark_system.add_course(c.cid)
+
+for c in courses:
+    print(f"\nEnter marks for {c.name}")
+    for s in students:
+        m = float(input(f"Mark for {s.sid}: "))
+        mark_system.add_mark(c.cid, s.sid, m)
+
+for c in courses:
+    mark_system.show_course_marks(c.cid, students)
