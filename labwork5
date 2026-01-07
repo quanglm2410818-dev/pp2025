@@ -1,0 +1,89 @@
+#utils.py
+def save_students(students):
+    with open("students.txt", "w") as f:
+        for s in students:
+            f.write(f"{s.sid},{s.name},{s.dob}\n")
+
+def save_courses(courses):
+    with open("courses.txt", "w") as f:
+        for c in courses:
+            f.write(f"{c.cid},{c.name}\n")
+
+def save_marks(marks):
+    with open("marks.txt", "w") as f:
+        for cid in marks:
+            for sid, m in marks[cid].items():
+                f.write(f"{cid},{sid},{m}\n")
+#zipping files
+import zipfile
+
+def compress_files():
+    with zipfile.ZipFile("students.dat", "w") as z:
+        z.write("students.txt")
+        z.write("courses.txt")
+        z.write("marks.txt")
+#loading data
+import os
+import zipfile
+
+def load_if_exists():
+    if os.path.exists("students.dat"):
+        with zipfile.ZipFile("students.dat", "r") as z:
+            z.extractall()
+        return True
+    return False
+#reading files
+from student import Student
+from course import Course
+
+def load_students():
+    students = []
+    with open("students.txt", "r") as f:
+        for line in f:
+            sid, name, dob = line.strip().split(",")
+            students.append(Student(sid, name, dob))
+    return students
+
+def load_courses():
+    courses = []
+    with open("courses.txt", "r") as f:
+        for line in f:
+            cid, name = line.strip().split(",")
+            courses.append(Course(cid, name))
+    return courses
+
+def load_marks():
+    marks = {}
+    with open("marks.txt", "r") as f:
+        for line in f:
+            cid, sid, m = line.strip().split(",")
+            if cid not in marks:
+                marks[cid] = {}
+            marks[cid][sid] = float(m)
+    return marks
+#main.py
+from utils import *
+from marks import StudentMark
+
+if load_if_exists():
+    students = load_students()
+    courses = load_courses()
+    mark_system = StudentMark()
+    mark_system.marks = load_marks()
+else:
+    students = input_students()
+    courses = input_courses()
+    mark_system = StudentMark()
+
+    for c in courses:
+        mark_system.add_course(c.cid)
+
+    for c in courses:
+        for s in students:
+            m = float(input(f"Mark for {s.sid} in {c.name}: "))
+            mark_system.add_mark(c.cid, s.sid, m)
+
+    save_students(students)
+    save_courses(courses)
+    save_marks(mark_system.marks)
+    compress_files()
