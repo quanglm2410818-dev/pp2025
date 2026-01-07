@@ -1,0 +1,53 @@
+def input_number_of_students():
+    return int(input("Number of students: "))
+
+def input_students(n):
+    students = []
+    for i in range(n):
+        print(f"\nStudent {i+1}")
+        sid = input("  ID: ")
+        name = input("  Name: ")
+        dob = input("  DoB: ")
+        students.append((sid, name, dob))
+    return students
+
+def input_number_of_courses():
+    return int(input("\nNumber of courses: "))
+
+def input_courses(n):
+    courses = []
+    for i in range(n):
+        print(f"\nCourse {i+1}")
+        cid = input("  Course ID: ")
+        cname = input("  Course name: ")
+        courses.append((cid, cname))
+    return courses
+
+def input_marks(students, courses):
+    marks = {}
+    for cid, cname in courses:
+        print(f"\nEnter marks for course: {cname}")
+        marks[cid] = {}
+        for sid, _, _ in students:
+            mark = float(input(f"  Mark for student {sid}: "))
+            marks[cid][sid] = mark
+    return marks
+
+def list_students(students):
+    print("\n--- Student List ---")
+    for sid, name, dob in students:
+        print(sid, "-", name, "-", dob)
+
+def list_courses(courses):
+    print("\n--- Course List ---")
+    for cid, cname in courses:
+        print(cid, "-", cname)
+
+def show_marks_for_course(course_id, students, marks):
+    print(f"\n--- Marks for course {course_id} ---")
+    if course_id not in marks:
+        print("Course not found!")
+        return
+    for sid, name, _ in students:
+        if sid in marks[course_id]:
+            print(name, ":", marks[course_id][sid])
