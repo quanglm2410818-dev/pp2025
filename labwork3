@@ -1,0 +1,20 @@
+import math
+import statistics
+
+def input_numbers():
+    n = int(input("How many numbers? "))
+    nums = []
+    for i in range(n):
+        nums.append(float(input(f"Number {i+1}: ")))
+    return nums
+
+def show_results(nums):
+    print("\n--- Results ---")
+    print("Numbers:", nums)
+    print("Min:", min(nums))
+    print("Max:", max(nums))
+    print("Average:", statistics.mean(nums))
+    print("Standard deviation:", statistics.stdev(nums))
+    print("Square roots:")
+    for x in nums:
+        print(f"sqrt({x}) =", math.sqrt(x))
